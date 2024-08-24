@@ -128,10 +128,6 @@ def fetch_posts(subreddit,field,num_of_comments,by_type):
 
 
 
-CID = "en2urmBP2aA3D-oHODy5LA"
-CS = "pTmD-xlDvc-OHGeuxtORnqAqPw87Dw"
-
-
 # no need to store title and body id they are the same as submission id 
 output = {
         'id' : '',
