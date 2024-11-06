@@ -4,7 +4,7 @@ import ides
 import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.firefox.options import Options
 
 
 def screenshot(driver,type,id):
@@ -28,7 +28,9 @@ def screenshot(driver,type,id):
 
 
 def take_screenshots(url,id):
-    driver = webdriver.Firefox()
+    options = Options()
+    options.headless = True
+    driver = webdriver.Firefox(options=options)
     driver.get(url)
     for com_id in output["comment_ides"]:
         screenshot(driver,"comment",com_id)
@@ -89,10 +91,10 @@ def get_submission(subreddit,filter,field):
     print("getting submission ...")
     submissions = select_submission(subreddit,"hot",filter,field)
     print("going thought submissions ...")
-    used_submissions = ides.get_ides()
-    for submission in submissions:
-        print("id : ",submission.id)
-        if (submission.id not in used_submissions) and (not submission.over_18):
+    used_ides = ides.get_ides()
+    for sub in submissions:
+        print("id : ",sub.id)
+        if (sub.id not in used_ides) and (not sub.over_18):
             return submission
 
 
@@ -127,6 +129,14 @@ def fetch_posts(subreddit,field,num_of_comments,by_type):
     print_output()
 
 
+def get_creds():
+    with open('secret.txt', 'r') as file:
+        # Read each line in the file
+        while True:
+            CIS = file.readline()
+            CS = file.readline()
+            if not CS :
+                break
 
 # no need to store title and body id they are the same as submission id 
 output = {
@@ -137,10 +147,13 @@ output = {
         "comment_ides" : [],
         "url" : ""
 }
+#there are the cridentials from your reddit api
+CID = ""
+CS = ""
 
-
-
-
+#Here you will need client_id and a client_secret that you can get for free from the reddit api
+#write them out in a txt file starting with client id and the script will read them out
+get_creds()
 reddit = praw.Reddit(
     client_id=CID,
     client_secret=CS,
